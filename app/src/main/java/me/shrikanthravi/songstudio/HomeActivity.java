@@ -60,6 +60,7 @@ public class HomeActivity extends AppCompatActivity implements MediaController.M
     ImageView playPauseIV,newPlayPauseIV,previousIV,nextIV;
     LinearLayout slideLL;
     public SeekBar mSeekBar;
+    CardView profileCV;
 
     //Vars
     int widthHeight ;
@@ -85,7 +86,12 @@ public class HomeActivity extends AppCompatActivity implements MediaController.M
         setContentView(R.layout.activity_home);
         //UI Init
         initUI();
-
+        profileCV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),PortfolioActivity.class));
+            }
+        });
 
     }
 
@@ -94,6 +100,7 @@ public class HomeActivity extends AppCompatActivity implements MediaController.M
         if(getSupportActionBar()!=null){
             getSupportActionBar().hide();
         }
+        profileCV = findViewById(R.id.profileCV);
         titleTV = findViewById(R.id.titleTV);
         titleTV.setTextColor(getResources().getColor(R.color.colorAccent));
         //titleTV.getPaint().setShader(new LinearGradient(0,0,0,titleTV.getLineHeight(),getResources().getColor(R.color.colorAccent),getResources().getColor(R.color.colorAccent1), Shader.TileMode.MIRROR));

@@ -3,4 +3,8 @@
 
 	<!-- TODO: Remove or change this placeholder text -->
 	<string name="hello_blank_fragment">Hello blank fragment</string>
+	<string name="github_link">https://github.com/shrikanth7698</string>
+	<string name="linkedin_link">https://www.linkedin.com/in/shrikanthravi</string>
+	<string name="portfolio_link">http://shrikanthravi.me/</string>
+
 </resources>

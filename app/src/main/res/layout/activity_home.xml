@@ -24,7 +24,7 @@
 			<ImageView
 				android:layout_width="24dp"
 				android:layout_height="24dp"
-				android:layout_marginTop="4dp"
+				android:layout_marginTop="2dp"
 				android:layout_gravity="center"
 				android:layout_marginStart="12dp"
 				android:src="@drawable/ic_music_note_black_24dp"/>
@@ -32,15 +32,29 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:id="@+id/titleTV"
+				android:layout_weight="1"
 				android:fontFamily="@font/open_sans_bold"
 				android:textSize="22sp"
 				android:text="@string/app_name"
 				android:gravity="top"
 				android:paddingStart="12dp"
-				android:paddingTop="10dp"
+				android:paddingTop="12.5dp"
 				android:paddingBottom="5dp"
 				android:paddingEnd="10dp"
 				android:textStyle="bold" />
+			<androidx.cardview.widget.CardView
+				android:layout_width="30dp"
+				android:layout_height="30dp"
+				android:layout_gravity="center"
+				android:id="@+id/profileCV"
+				app:cardCornerRadius="15dp"
+				android:layout_margin="12dp"
+				app:cardElevation="0dp">
+				<ImageView
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:src="@drawable/shrikanth_profile"/>
+			</androidx.cardview.widget.CardView>
 
 		</LinearLayout>
 
@@ -165,7 +179,7 @@
 				<SeekBar
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:layout_marginTop="10dp"
+					android:layout_marginTop="30dp"
 					android:layout_marginLeft="20dp"
 					android:layout_marginRight="20dp"
 					android:clickable="true"
@@ -240,6 +254,7 @@
 					android:layout_width="60dp"
 					android:layout_height="60dp"
 					android:scaleType="fitCenter"
+					android:padding="3dp"
 					android:layout_margin="10dp"
 					android:clickable="true"
 					android:layout_below="@id/newSongArtist"
@@ -251,11 +266,33 @@
 					android:layout_width="60dp"
 					android:layout_height="60dp"
 					android:layout_margin="10dp"
+					android:padding="3dp"
 					android:scaleType="fitCenter"
 					android:clickable="true"
 					android:layout_below="@id/newSongArtist"
 					android:layout_toEndOf="@id/newPlayPauseIV"
 					android:src="@drawable/ic_skip_next_black_24dp"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_centerHorizontal="true"
+					android:layout_below="@id/newPlayPauseIV"
+					android:layout_gravity="center"
+					android:clickable="true"
+					android:foreground="?android:selectableItemBackgroundBorderless"
+					android:id="@+id/purchaseTV"
+					android:background="@drawable/rounded_corner_bg"
+					android:textStyle="bold"
+					android:textColor="@android:color/white"
+					android:paddingStart="15dp"
+					android:paddingEnd="15dp"
+					android:paddingTop="6.5dp"
+					android:paddingBottom="6.5dp"
+					android:fontFamily="@font/open_sans_semibold"
+					android:gravity="center"
+					android:text="Purchase" />
+
 
 
 

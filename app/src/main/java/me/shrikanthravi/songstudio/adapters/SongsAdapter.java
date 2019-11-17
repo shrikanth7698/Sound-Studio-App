@@ -83,7 +83,7 @@ public class SongsAdapter  extends RecyclerView.Adapter<SongsAdapter.MyViewHolde
                     Animation.RELATIVE_TO_SELF, 0.5f
             );
             rotate.setInterpolator(new LinearInterpolator());
-            //This is the average speed at which a gramophone disc spins (78 RPM)
+            //This is the average speed at which a gramophone disc spins (78 RPM) (1.3 RPS)
             rotate.setDuration(1300);
             rotate.setRepeatCount(Animation.INFINITE);
             holder.songCoverCV.startAnimation(rotate);

@@ -1,6 +1,9 @@
 package me.shrikanthravi.songstudio.fragments;
 
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -49,6 +54,8 @@ public class SongsFragment extends Fragment {
     RecyclerView songsRV;
     public static SongsAdapter songsAdapter;
     public ImageView splaypause,newplaypause;
+    LinearLayout noInternetLL;
+    TextView retryTV;
 
     //Vars
     ArrayList<Song> songList = new ArrayList<>();
@@ -63,12 +70,30 @@ public class SongsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_songs, container, false);
         initView(view);
-        //TODO Add internet check before gettings songs from api
-        getSongs();
+        if(isNetworkAvailable()){
+            getSongs();
+        }else{
+            noInternetLL.setVisibility(View.VISIBLE);
+            retryTV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(isNetworkAvailable()){
+                        noInternetLL.setVisibility(View.GONE);
+                        getSongs();
+                    }else{
+                        Toast.makeText(getActivity().getApplicationContext(),"No Internet!",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+
+
         return view;
     }
 
     void initView(View view){
+        noInternetLL = view.findViewById(R.id.noInternetLL);
+        retryTV = view.findViewById(R.id.retryTV);
         songsRV = view.findViewById(R.id.songsRV);
         splaypause = getActivity().findViewById(R.id.playPauseIV);
         newplaypause = getActivity().findViewById(R.id.newPlayPauseIV);
@@ -142,6 +167,14 @@ public class SongsFragment extends Fragment {
 
             }
         });
+    }
+
+    //Network connectivity check
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
 }
