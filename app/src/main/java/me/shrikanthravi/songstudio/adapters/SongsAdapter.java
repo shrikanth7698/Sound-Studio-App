@@ -18,8 +18,9 @@ import java.util.List;
 import me.shrikanthravi.songstudio.R;
 import me.shrikanthravi.songstudio.data.model.Song;
 
+
 public class SongsAdapter  extends RecyclerView.Adapter<SongsAdapter.MyViewHolder>{
-    private List<Song> songList;
+    public static List<Song> songList;
     private final OnItemClickListener listener;
     Context context;
 
@@ -63,9 +64,15 @@ public class SongsAdapter  extends RecyclerView.Adapter<SongsAdapter.MyViewHolde
         holder.rootLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onItemClick(song);
+                listener.onItemClick(song,position);
             }
         });
+        if(position==playingpos){
+            //TODO start rotate animation
+        }
+        else{
+            //TODO stop rotate animation
+        }
     }
     @Override
     public int getItemCount() {
@@ -74,6 +81,10 @@ public class SongsAdapter  extends RecyclerView.Adapter<SongsAdapter.MyViewHolde
 
 
     public interface OnItemClickListener {
-        void onItemClick(Song item);
+        void onItemClick(Song item,int pos);
+    }
+    int playingpos;
+    public void setPlayingSongPostion(int pos){
+        playingpos=pos;
     }
 }

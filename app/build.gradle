@@ -29,6 +29,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
     implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
+    implementation 'org.greenrobot:eventbus:3.1.1'
 
     implementation "androidx.recyclerview:recyclerview:1.0.0"
     implementation 'com.google.android.material:material:1.0.0'

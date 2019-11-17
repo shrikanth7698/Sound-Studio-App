@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -29,6 +30,10 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static me.shrikanthravi.songstudio.HomeActivity.isSlidePanelOpen;
+import static me.shrikanthravi.songstudio.HomeActivity.musicSrv;
+import static me.shrikanthravi.songstudio.HomeActivity.playbackPaused;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -42,10 +47,15 @@ public class SongsFragment extends Fragment {
 
     //Views
     RecyclerView songsRV;
-    SongsAdapter songsAdapter;
+    public static SongsAdapter songsAdapter;
+    public ImageView splaypause,newplaypause;
 
     //Vars
-    List<Song> songList = new ArrayList<>();
+    ArrayList<Song> songList = new ArrayList<>();
+    private static final int[] STATE_SET_PLAY =
+            {R.attr.state_play, -R.attr.state_pause, -R.attr.state_stop};
+    private static final int[] STATE_SET_PAUSE =
+            {-R.attr.state_play, R.attr.state_pause, -R.attr.state_stop};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,10 +70,26 @@ public class SongsFragment extends Fragment {
 
     void initView(View view){
         songsRV = view.findViewById(R.id.songsRV);
+        splaypause = getActivity().findViewById(R.id.playPauseIV);
+        newplaypause = getActivity().findViewById(R.id.newPlayPauseIV);
         songsAdapter = new SongsAdapter(songList, getActivity().getApplicationContext(), new SongsAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(Song item) {
+            public void onItemClick(Song item,int pos) {
                 //TODO implement play function
+                musicSrv.setList(songList);
+                musicSrv.setSong(pos);
+                musicSrv.playSong();/*
+                songList.get(previouspos).setPlaying(false);
+                previouspos = position;
+                songList.get(position).setPlaying(true);*/
+                songsAdapter.notifyDataSetChanged();
+                splaypause.setImageState(STATE_SET_PAUSE, true);
+                newplaypause.setImageState(STATE_SET_PAUSE, true);
+                if (playbackPaused) {
+                    playbackPaused = false;
+                }
+
+                isSlidePanelOpen=true;
             }
         });
         songsRV.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext(),RecyclerView.VERTICAL,false));
