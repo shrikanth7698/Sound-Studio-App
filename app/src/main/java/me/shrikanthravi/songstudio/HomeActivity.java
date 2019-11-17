@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -20,11 +22,13 @@ import android.os.IBinder;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -61,6 +65,7 @@ public class HomeActivity extends AppCompatActivity implements MediaController.M
     LinearLayout slideLL;
     public SeekBar mSeekBar;
     CardView profileCV;
+    TextView purchaseTV;
 
     //Vars
     int widthHeight ;
@@ -92,6 +97,13 @@ public class HomeActivity extends AppCompatActivity implements MediaController.M
                 startActivity(new Intent(getApplicationContext(),PortfolioActivity.class));
             }
         });
+        purchaseTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPurchaseDialog(HomeActivity.this,songList.get(musicSrv.getSong()));
+                purchaseTV.setVisibility(View.GONE);
+            }
+        });
 
     }
 
@@ -100,6 +112,7 @@ public class HomeActivity extends AppCompatActivity implements MediaController.M
         if(getSupportActionBar()!=null){
             getSupportActionBar().hide();
         }
+        purchaseTV = findViewById(R.id.purchaseTV);
         profileCV = findViewById(R.id.profileCV);
         titleTV = findViewById(R.id.titleTV);
         titleTV.setTextColor(getResources().getColor(R.color.colorAccent));
@@ -337,6 +350,7 @@ public class HomeActivity extends AppCompatActivity implements MediaController.M
                 if(v<1.0){
                     slideLL.setVisibility(View.VISIBLE);
                     playPauseIV.setVisibility(View.VISIBLE);
+
                 }
                 else{
                     if(v==1.0){
@@ -353,6 +367,7 @@ public class HomeActivity extends AppCompatActivity implements MediaController.M
                 if(panelState.equals("EXPANDED")){
 
                     isSlidePanelOpen1=true;
+                    purchaseTV.setVisibility(View.GONE);
                     ViewGroup.LayoutParams params = slidingPanelImageView.getLayoutParams();
                     params.width = params.height = ((int) (widthHeight + (widthHeight * sWidth/100)));
                     slidingPanelImageView.setLayoutParams(params);
@@ -361,6 +376,7 @@ public class HomeActivity extends AppCompatActivity implements MediaController.M
                     isSlidePanelOpen1=false;
                     slideLL.setVisibility(View.INVISIBLE);
                     playPauseIV.setVisibility(View.INVISIBLE);
+                    purchaseTV.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -558,7 +574,27 @@ public class HomeActivity extends AppCompatActivity implements MediaController.M
         newArtistName.setText(song.getArtists());
     }
 
+    public void showPurchaseDialog(Activity activity,Song song) {
+        final Dialog dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.purchase_dialog);
+        ImageView iv = dialog.findViewById(R.id.songCoverIV);
+        TextView name = dialog.findViewById(R.id.songNameTV);
+        TextView artist = dialog.findViewById(R.id.artistTV);
+        TextView buyTV = dialog.findViewById(R.id.buyTV);
+        Picasso.get().load(song.getCoverImage()).into(iv);
+        name.setText(song.getSongName());
+        artist.setText(song.getArtists());
+        buyTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"Song purchased successfully!",Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
 
-
+        dialog.show();
+    }
 
 }

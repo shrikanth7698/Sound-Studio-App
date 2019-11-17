@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
 	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
-	android:background="?attr/selectableItemBackground"
-	android:clickable="true"
-	android:id="@+id/rootLayout"
-	xmlns:app="http://schemas.android.com/apk/res-auto">
-
+	android:background="@android:color/white"
+	android:layout_height="wrap_content">
 	<RelativeLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+		android:padding="4dp"
 		>
 
 		<androidx.cardview.widget.CardView
@@ -46,7 +45,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="vertical"
-			android:layout_toStartOf="@id/loadingPB"
+			android:layout_toStartOf="@id/priceTV"
 			android:id="@+id/holder"
 			android:layout_marginEnd="10dp"
 			android:layout_toEndOf="@id/songCoverCV"
@@ -82,28 +81,77 @@
 
 
 		</LinearLayout>
-		<ProgressBar
-			android:layout_width="30dp"
-			android:layout_height="30dp"
-			android:layout_marginEnd="12dp"
-			android:id="@+id/loadingPB"
-			android:visibility="invisible"
-			android:layout_centerVertical="true"
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="15 INR"
+			android:id="@+id/priceTV"
+			android:textSize="20sp"
+			android:fontFamily="@font/open_sans_bold"
+			android:textStyle="bold"
+			android:textColor="@android:color/black"
+			android:gravity="end|center"
+			android:layout_margin="12dp"
 			android:layout_alignParentEnd="true"/>
 		<View
 			android:layout_width="match_parent"
 			android:layout_height="1dp"
 			android:id="@+id/dividerView"
+			android:visibility="invisible"
 			android:layout_marginTop="4dp"
 			android:layout_marginStart="79dp"
 			android:layout_below="@id/songCoverCV"
 			android:background="#efefef"/>
 
 	</RelativeLayout>
-	<View
+	<TextView
+
 		android:layout_width="match_parent"
-		android:layout_height="75dp"
-		android:id="@+id/loadView"
-		android:visibility="gone"
-		android:background="#66F2F2F2"/>
-</RelativeLayout>
+		android:layout_height="wrap_content"
+		android:layout_marginTop="2dp"
+		android:paddingStart="16dp"
+		android:paddingEnd="16dp"
+		android:clickable="false"
+		android:duplicateParentState="true"
+		android:fontFamily="@font/open_sans_semibold"
+		android:text="By tapping buy ,you agree to the terms and conditions. No refund allowed"
+		 />
+
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="20dp"
+		android:layout_marginBottom="16dp"
+		android:orientation="horizontal">
+		<ImageView
+			android:layout_width="80dp"
+			android:layout_marginStart="12dp"
+			android:layout_height="30dp"
+			android:layout_gravity="center"
+			android:src="@drawable/gpay"/>
+		<View
+			android:layout_width="0dp"
+			android:layout_height="1dp"
+			android:layout_weight="1"/>
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="16dp"
+			android:layout_gravity="center"
+			android:clickable="true"
+			android:foreground="?android:selectableItemBackground"
+			android:id="@+id/buyTV"
+			android:background="@drawable/rounded_corner_bg"
+			android:textStyle="bold"
+			android:textColor="@android:color/white"
+			android:paddingStart="15dp"
+			android:paddingEnd="15dp"
+			android:paddingTop="6.5dp"
+			android:paddingBottom="6.5dp"
+			android:fontFamily="@font/open_sans_semibold"
+			android:gravity="center"
+			android:text="Buy" />
+
+	</LinearLayout>
+</LinearLayout>
