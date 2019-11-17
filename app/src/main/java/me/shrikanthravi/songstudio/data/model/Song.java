@@ -17,6 +17,8 @@ public class Song {
     @Expose
     private String coverImage;
 
+    private boolean playing = false;
+
     public String getSongName() {
         return songName;
     }
@@ -47,5 +49,13 @@ public class Song {
 
     public void setCoverImage(String coverImage) {
         this.coverImage = coverImage;
+    }
+
+    public boolean isPlaying() {
+        return playing;
+    }
+
+    public void setPlaying(boolean playing) {
+        this.playing = playing;
     }
 }

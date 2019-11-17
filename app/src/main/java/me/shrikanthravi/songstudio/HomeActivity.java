@@ -2,15 +2,19 @@ package me.shrikanthravi.songstudio;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import me.shrikanthravi.songstudio.adapters.SongsAdapter;
 import me.shrikanthravi.songstudio.data.model.Song;
 import me.shrikanthravi.songstudio.data.remote.APIService;
 import me.shrikanthravi.songstudio.data.remote.GlobalData;
@@ -23,12 +27,40 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class HomeActivity extends AppCompatActivity {
 
     String TAG = "HomeActivity";
+
+    //Views
+    RecyclerView songsRV;
+    SongsAdapter songsAdapter;
+
+    //Vars
+    List<Song> songList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        //TODO Add internet check
+        //UI Init
+        initUI();
+
+        //TODO Add internet check before gettings songs from api
         getSongs();
+    }
+
+    //UI init
+    void initUI(){
+        if(getSupportActionBar()!=null){
+            getSupportActionBar().hide();
+        }
+        songsRV = findViewById(R.id.songsRV);
+        songsAdapter = new SongsAdapter(songList, getApplicationContext(), new SongsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Song item) {
+                //TODO implement play function
+            }
+        });
+        songsRV.setLayoutManager(new LinearLayoutManager(getApplicationContext(),RecyclerView.VERTICAL,false));
+        songsRV.setAdapter(songsAdapter);
+
     }
 
     // Fetching songs from given API using Retrofit
@@ -54,9 +86,12 @@ public class HomeActivity extends AppCompatActivity {
 
                 if (response.isSuccessful()) {
                     assert response.body() != null;
-                    for(Song song: response.body()){
+                    /*for(Song song: response.body()){
                         System.out.println(song.getSongName());
-                    }
+                    }*/
+                    songList.clear();
+                    songList.addAll(response.body());
+                    songsAdapter.notifyDataSetChanged();
                 }
                 else {
                     Toast.makeText(getApplicationContext(),"Server Error", Toast.LENGTH_SHORT).show();
