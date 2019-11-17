@@ -9,7 +9,11 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
+
+import me.shrikanthravi.songstudio.data.model.MessageEvent;
 import me.shrikanthravi.songstudio.data.model.Song;
 
 public class MusicService extends Service implements
@@ -84,7 +88,7 @@ public class MusicService extends Service implements
         }
 
         try {
-
+            EventBus.getDefault().post(new MessageEvent(true,songPosn));
             player.prepareAsync();
             /*isMpPrepared=true;
             player.start();
@@ -98,6 +102,7 @@ public class MusicService extends Service implements
     @Override
     public void onPrepared(MediaPlayer mp) {
         //start playback
+        EventBus.getDefault().post(new MessageEvent(false,songPosn));
         isMpPrepared=true;
         System.out.println("why");
         mp.start();

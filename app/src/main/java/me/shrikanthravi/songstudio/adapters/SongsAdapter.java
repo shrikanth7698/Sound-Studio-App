@@ -4,8 +4,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
@@ -26,7 +31,9 @@ public class SongsAdapter  extends RecyclerView.Adapter<SongsAdapter.MyViewHolde
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        public LinearLayout rootLayout;
+        public RelativeLayout rootLayout;
+        public View loadingView;
+        public ProgressBar loadingPB;
         public CardView songCoverCV;
         public ImageView songCoverIV;
         public TextView songNameTV;
@@ -38,7 +45,8 @@ public class SongsAdapter  extends RecyclerView.Adapter<SongsAdapter.MyViewHolde
             songCoverIV = view.findViewById(R.id.songCoverIV);
             songNameTV = view.findViewById(R.id.songNameTV);
             artistTV = view.findViewById(R.id.artistTV);
-
+            loadingPB = view.findViewById(R.id.loadingPB);
+            loadingView = view.findViewById(R.id.loadView);
         }
     }
 
@@ -69,9 +77,29 @@ public class SongsAdapter  extends RecyclerView.Adapter<SongsAdapter.MyViewHolde
         });
         if(position==playingpos){
             //TODO start rotate animation
+            RotateAnimation rotate = new RotateAnimation(
+                    0, 360,
+                    Animation.RELATIVE_TO_SELF, 0.5f,
+                    Animation.RELATIVE_TO_SELF, 0.5f
+            );
+            rotate.setInterpolator(new LinearInterpolator());
+            //This is the average speed at which a gramophone disc spins (78 RPM)
+            rotate.setDuration(1300);
+            rotate.setRepeatCount(Animation.INFINITE);
+            holder.songCoverCV.startAnimation(rotate);
         }
         else{
             //TODO stop rotate animation
+            holder.songCoverCV.setRotation(0);
+        }
+        if(song.isLoading()){
+            holder.rootLayout.setEnabled(false);
+            holder.loadingView.setVisibility(View.VISIBLE);
+            holder.loadingPB.setVisibility(View.VISIBLE);
+        }else{
+            holder.rootLayout.setEnabled(true);
+            holder.loadingView.setVisibility(View.GONE);
+            holder.loadingPB.setVisibility(View.GONE);
         }
     }
     @Override
@@ -83,7 +111,7 @@ public class SongsAdapter  extends RecyclerView.Adapter<SongsAdapter.MyViewHolde
     public interface OnItemClickListener {
         void onItemClick(Song item,int pos);
     }
-    int playingpos;
+    int playingpos=-1;
     public void setPlayingSongPostion(int pos){
         playingpos=pos;
     }

@@ -30,7 +30,13 @@ import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Picasso;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import me.shrikanthravi.songstudio.adapters.ViewPagerAdapter;
+import me.shrikanthravi.songstudio.data.model.MessageEvent;
+import me.shrikanthravi.songstudio.data.model.Song;
 import me.shrikanthravi.songstudio.fragments.LibraryFragment;
 import me.shrikanthravi.songstudio.fragments.SongsFragment;
 import me.shrikanthravi.songstudio.services.MusicController;
@@ -89,7 +95,8 @@ public class HomeActivity extends AppCompatActivity implements MediaController.M
             getSupportActionBar().hide();
         }
         titleTV = findViewById(R.id.titleTV);
-        titleTV.getPaint().setShader(new LinearGradient(0,0,0,titleTV.getLineHeight(),getResources().getColor(R.color.colorAccent),getResources().getColor(R.color.colorAccent1), Shader.TileMode.MIRROR));
+        titleTV.setTextColor(getResources().getColor(R.color.colorAccent));
+        //titleTV.getPaint().setShader(new LinearGradient(0,0,0,titleTV.getLineHeight(),getResources().getColor(R.color.colorAccent),getResources().getColor(R.color.colorAccent1), Shader.TileMode.MIRROR));
         viewPager = findViewById(R.id.viewPager);
         setupViewPager();
         slidingPanelImageView = findViewById(R.id.slidingUpPanelImageView);
@@ -122,6 +129,9 @@ public class HomeActivity extends AppCompatActivity implements MediaController.M
                     playPauseIV.setImageState(STATE_SET_PAUSE,true);
                     newPlayPauseIV.setImageState(STATE_SET_PAUSE,true);
                     playBool=false;
+
+                    SongsFragment.songsAdapter.setPlayingSongPostion(-1);
+                    SongsFragment.songsAdapter.notifyItemChanged(musicSrv.getSong());
                 }
                 else{
 
@@ -129,6 +139,8 @@ public class HomeActivity extends AppCompatActivity implements MediaController.M
                     playPauseIV.setImageState(STATE_SET_PLAY,true);
                     newPlayPauseIV.setImageState(STATE_SET_PLAY,true);
                     playBool=true;
+                    SongsFragment.songsAdapter.setPlayingSongPostion(musicSrv.getSong());
+                    SongsFragment.songsAdapter.notifyItemChanged(musicSrv.getSong());
                 }
             }
         });
@@ -378,6 +390,7 @@ public class HomeActivity extends AppCompatActivity implements MediaController.M
     @Override
     public void onStart() {
         super.onStart();
+        EventBus.getDefault().register(this);
         if(playIntent==null){
             playIntent = new Intent(this, MusicService.class);
             bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
@@ -402,6 +415,7 @@ public class HomeActivity extends AppCompatActivity implements MediaController.M
         controller.hide();
 
         super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -506,9 +520,38 @@ public class HomeActivity extends AppCompatActivity implements MediaController.M
             isSlidePanelOpen1=false;
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         }
-        else{
-        }
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+        if(event.isLoad()){
+            songList.get(event.getPos()).setLoading(true);
+        }else{
+            songList.get(event.getPos()).setLoading(false);
+            SongsFragment.songsAdapter.setPlayingSongPostion(event.getPos());
+        }
+        SongsFragment.songsAdapter.notifyItemChanged(event.getPos());
+        updatePlayerUI(event.isLoad(),songList.get(event.getPos()));
+    }
+
+    //Only from music service
+    void updatePlayerUI(boolean loading, Song song){
+        if(loading){
+            playPauseIV.setEnabled(false);
+            playPauseIV.setAlpha(0.5F);
+            artistName.setText("Loading");
+        }else{
+            playPauseIV.setEnabled(true);
+            playPauseIV.setAlpha(1F);
+            artistName.setText(song.getArtists());
+        }
+        Picasso.get().load(song.getCoverImage()).into(slidingPanelImageView);
+        songName.setText(song.getSongName());
+        newSongName.setText(song.getSongName());
+        newArtistName.setText(song.getArtists());
+    }
+
+
 
 
 }

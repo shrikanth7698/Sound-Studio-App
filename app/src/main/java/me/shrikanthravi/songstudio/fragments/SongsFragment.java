@@ -75,6 +75,8 @@ public class SongsFragment extends Fragment {
         songsAdapter = new SongsAdapter(songList, getActivity().getApplicationContext(), new SongsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Song item,int pos) {
+                songsAdapter.setPlayingSongPostion(-1);
+                songsAdapter.notifyDataSetChanged();
                 //TODO implement play function
                 musicSrv.setList(songList);
                 musicSrv.setSong(pos);

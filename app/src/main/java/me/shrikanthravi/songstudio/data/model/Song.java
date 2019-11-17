@@ -19,6 +19,8 @@ public class Song {
 
     private boolean playing = false;
 
+    private boolean loading = false;
+
     public String getSongName() {
         return songName;
     }
@@ -57,5 +59,13 @@ public class Song {
 
     public void setPlaying(boolean playing) {
         this.playing = playing;
+    }
+
+    public boolean isLoading() {
+        return loading;
+    }
+
+    public void setLoading(boolean loading) {
+        this.loading = loading;
     }
 }
